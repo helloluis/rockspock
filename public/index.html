@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name = "viewport" content = "width = device-width, initial-scale = 1, user-scalable = no">
+
+  <title>Rock > Paper > Scissors > Lizard > Spock</title>
+  
+  <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="javascripts/jquery-ui-1.8.16.custom.min.js"></script>
+  <script src="javascripts/underscore.js"></script>
+  <script src="javascripts/jquery-timers.js"></script>
+  <script src="javascripts/game.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Passion+One|Enriqueta' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="stylesheets/game.css"/>
+
+</head>
+
+<body>
+
+<div id="intro" class="screen">
+  <div class="screen_inner">
+    <ul class="examples">
+      <li class="rock"></li>
+      <li class="paper"></li>
+      <li class="scissors"></li>
+      <li class="lizard"></li>
+      <li class="spock"></li>
+    </ul>
+    <h1>Rock > Paper > Scissors > Lizard > Spock</h1>
+    <h2>A drunken-reflexes, head-to-head iPad game by <a href="http://twitter.com/helloluis">@helloluis</a></h2>
+    <section>
+    <h2>How to play</h2>
+    <p><strong>Firstly</strong>, you <strong>must</strong> have an iPad (or other horizontally-oriented tablet device) in order to play this.</p>
+    <p><strong>Second</strong>, you <strong>must</strong> memorize the following:</p>
+    <blockquote><p>Scissors cuts Paper covers Rock crushes Lizard poisons Spock smashes Scissors decapitates Lizard eats Paper disproves Spock vaporizes Rock crushes Scissors.</p></blockquote>
+    <p><strong>Finally</strong>, this game isn't played the way traditional Rock-Paper-Scissors is. In <em>RPSLS Reflexes</em>, <strong>only one player acts at a time</strong>. If the <span class="blue">blue player</span> plays Rock, the <span class="red">red player</span> must choose either Paper or Spock, to which the blue player must respond with one of the other options. It goes back-and-forth for as long as each chosen item is stronger than the last. You score a point if your opponent can't respond in time (they have 1 second), or if they respond with a weaker item.</p>
+    <p>And now you're ready to play!</p>
+    </section>
+    <h2 class="bttn start_game">Play!</h2>
+  </div>
+</div>
+
+<div id="game" class="screen">
+  
+  <section id="countdown"></section>
+
+  <section id="player_blue" class="player">
+
+    <div class="messages"></div>
+
+    <ul class="buttons">
+      <li data-value="rock" class="rock"></li>
+      <li data-value="paper" class="paper"></li>
+      <li data-value="scissors" class="scissors"></li>
+      <li data-value="lizard" class="lizard"></li>
+      <li data-value="spock" class="spock"></li>
+    </ul>
+    <div class="scores">
+      <p class="red">000</p>
+      <p class="blue">000</p>
+    </div>
+    <div class="timer"><div class="bar"></div></div>
+    <div class="history">
+      <ul class="blue"></ul>
+      <ul class="red"></ul>
+    </div>
+    <h2 class="bttn pause">Pause</h2>
+    <h2 class="bttn quit">Quit</h2>
+
+  </section>
+
+  <section id="player_red" class="player">
+  
+    <div class="messages"></div>
+
+    <ul class="buttons">
+      <li data-value="rock" class="rock"></li>
+      <li data-value="paper" class="paper"></li>
+      <li data-value="scissors" class="scissors"></li>
+      <li data-value="lizard" class="lizard"></li>
+      <li data-value="spock" class="spock"></li>
+    </ul>
+    <div class="scores">
+      <p class="blue">000</p>
+      <p class="red">000</p>
+    </div>
+    <div class="timer"><div class="bar"></div></div>
+    <div class="history">
+      <ul class="blue"></ul>
+      <ul class="red"></ul>
+    </div>
+    <h2 class="bttn pause">Pause</h2>
+    <h2 class="bttn quit">Quit</h2>
+
+  </section>
+  
+</div>
+
+<div id="credits" class="screen"></div>
+
+  <script>
+    $(function(){
+      Game.initialize(false);
+    });
+  </script>
+
+</body>
+</html>
