@@ -57,6 +57,8 @@ Game = {
     Game.refresh_scores();
     Game.countdown.empty();
 
+    Game.prevent_portrait_mode();
+
     $(".pause, .quit, .buttons li").addClass('disabled');
 
   },
@@ -232,7 +234,7 @@ Game = {
           complete : function(){
 
             Game.challenge = false;
-            Game.increment_score(!blue);
+            Game.increment_score(blue);
             Game.activate_player(!blue);
 
             old_challenge.animate({ opacity : 0, top : 100 }, { 
@@ -353,5 +355,31 @@ Game = {
     if (return_to_intro===true) {
       Game.initialize_behaviours();
     }
+  },
+
+  pause : function(aux_text) {
+    
+    var str = "<h2>PAUSED</h2>" + ( aux_text ? aux_text : "");
+
+    $("<div id='overlay'></div>").html(str).appendTo('body');
+
+  },
+
+  resume : function() {
+    $("#overlay").remove();
+  },
+
+  prevent_portrait_mode : function() {
+    
+    function reorient(e) {
+      if (window.orientation % 180 == 0) {
+        Game.pause("Please return your iPad to its horizontal orientation");
+      } else {
+        Game.resume(); 
+      }
+    }
+    window.onorientationchange = reorient;
+    window.setTimeout(reorient, 0);
+
   }
 };
