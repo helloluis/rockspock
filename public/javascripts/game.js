@@ -6,11 +6,11 @@ Game = {
   blue_active : true,
   challenge   : false,
   challenges  : {
-    rock      : { stronger_than : [ 'lizard', 'scissors' ], weaker_than : [ 'paper', 'spock' ] },
-    paper     : { stronger_than : [ 'rock', 'spock' ],      weaker_than : [ 'lizard', 'scissors' ] },
-    scissors  : { stronger_than : [ 'paper', 'lizard' ],    weaker_than : [ 'rock', 'spock' ] },
-    lizard    : { stronger_than : [ 'paper', 'spock' ],     weaker_than : [ 'rock', 'scissors' ] },
-    spock     : { stronger_than : [ 'rock', 'scissors' ],   weaker_than : [ 'lizard', 'paper' ] }
+    rock      : { stronger_than : [ 'lizard', 'scissors' ],   weaker_than : [ 'paper', 'spock' ],       strong_verbs : [ 'crushes', 'crushes' ],    weak_verbs : [ 'is covered by', 'is vaporized by' ] },
+    paper     : { stronger_than : [ 'rock', 'spock' ],        weaker_than : [ 'lizard', 'scissors' ],   strong_verbs : [ 'covers', 'disproves' ],   weak_verbs : [ 'is eaten by', 'is cut by' ] },
+    scissors  : { stronger_than : [ 'paper', 'lizard' ],      weaker_than : [ 'rock', 'spock' ],        strong_verbs : [ 'cuts', 'decapitates' ],   weak_verbs : [ 'is crushed by', 'is smashed by' ] },
+    lizard    : { stronger_than : [ 'paper', 'spock' ],       weaker_than : [ 'rock', 'scissors' ],     strong_verbs : [ 'eats', 'poisons' ],       weak_verbs : [ 'is crushed by', 'is decapitated by' ] },
+    spock     : { stronger_than : [ 'rock', 'scissors' ],     weaker_than : [ 'lizard', 'paper' ],      strong_verbs : [ 'vaporizes', 'smashes' ],  weak_verbs : [ 'is poisoned by', 'is disproved by' ] }
   },
   history     : [ [], [] ],
   sounds      : {},
@@ -141,14 +141,28 @@ Game = {
       $("#player_" + (blue ? 'blue' : 'red') + " .timer .bar").animate({ height : 0, bottom : 0 }, {
         duration : Game.wait,
         complete : function(){
+
+            // console.log('completed animating timer bar');
+            Game.deactivate_player(blue);
+            Game.sounds.buzzer.play();
             $(".challenge_container", opponent).animate({ opacity : 0 },{ duration : 100, complete : function(){ $(this).remove(); }});
             Game.increment_score(!blue);
-            Game.challenge = false;
-            Game.activate_player(blue);
+            Game.show_challenge_description(blue, undefined, function(new_player){ 
+              Game.challenge = false; 
+              Game.activate_player(new_player); 
+            });
+            //Game.challenge = false;
+
           }
         });  
     }
     
+  },
+
+  deactivate_player : function(blue) {
+    
+    $("#player_" + (blue ? 'blue' : 'red') + " .buttons li").addClass('disabled');
+
   },
 
   pick : function(blue, value, bttn) {
@@ -168,13 +182,10 @@ Game = {
         origin         = $(".buttons ." + value, challenger);
 
     // kill all timer animations
-    $(".timer .bar").stop(false,false).css('height','100%');
+    $("#player_blue .timer .bar, #player_red .timer .bar").stop(false,false).css('height','100%');
     
-
     if (Game.is_stronger_than(value)) {
 
-      Game.challenge = value;  
-      
       var div = $("<div></div>").
         append("<div class='challenge " + value + "'></div>").
         append("<div class='challenge_countdown'></div>").
@@ -196,7 +207,10 @@ Game = {
 
             var self = $(this);
 
-            Game.activate_player(blue);
+            Game.show_challenge_description(blue, value, function(){ 
+              Game.challenge = value;
+              Game.activate_player(blue); 
+            });
 
             old_challenge.animate(
               { opacity  : 0, top : 100 },
@@ -210,7 +224,7 @@ Game = {
     } else {
 
       Game.sounds.buzzer.play();
-      
+
       var div = $("<div></div>").
         append("<div class='challenge " + value + "'></div>").
         append("<div class='challenge_countdown'></div>").
@@ -235,10 +249,12 @@ Game = {
           duration : 300, 
           complete : function(){
 
-            Game.challenge = false;
-            Game.increment_score(blue);
-            Game.activate_player(!blue);
-
+            Game.show_challenge_description(!blue, value, function(){ 
+              Game.increment_score(blue);
+              Game.challenge = false; 
+              Game.activate_player(!blue); 
+            });
+            
             old_challenge.animate({ opacity : 0, top : 100 }, { 
               duration : 300, 
               complete : function(){
@@ -249,6 +265,84 @@ Game = {
         });
     }
     
+  },
+
+  // TODO: This should flash the description of the challenge, i.e., 'Spock vaporizes Rock',
+  // then run the callback once it's all done
+  show_challenge_description: function(blue, new_challenge, callback){
+    
+    // challenged player ran out of time
+    if (new_challenge===undefined) {
+
+      console.log('out of time');
+      if (blue) {
+        var str = "<span class='blue'>:)</span> <span class='red'>:(</span>";
+      } else {
+        var str = "<span class='blue'>:(</span> <span class='red'>:)</span>";
+      }
+      
+      Game.show_message(str, true);
+
+      _.delay(function(){
+        Game.hide_message();
+        if (callback!==undefined) {
+          callback.call(this, blue);
+        }
+      }, 1000);
+
+    // this is a new challenge
+    } else if (!Game.challenge || Game.challenge==new_challenge) {
+      
+      console.log('new challenge');
+
+      if (callback!==undefined) {
+        callback.call(this, blue);
+      }
+
+    // challenged player picked stronger item
+    } else if (Game.is_stronger_than(new_challenge)) {
+      
+      var subject   = new_challenge,
+          verb      = Game.challenges[new_challenge].strong_verbs[ Game.challenges[new_challenge].stronger_than.indexOf(Game.challenge) ],
+          predicate = Game.challenge;
+
+      var str = [ subject, verb, predicate ].join(" ");
+
+      console.log('stronger', str);
+
+      Game.show_message(str, true);
+
+      _.delay(function(){
+        Game.hide_message();
+      }, 1000);
+
+      if (callback!==undefined) {
+        callback.call(this, blue);
+      }
+
+    // challenged player picked weaker item
+    } else if (!Game.is_stronger_than(new_challenge)) {
+      
+      var subject   = new_challenge,
+          verb      = Game.challenges[new_challenge].weak_verbs[ Game.challenges[new_challenge].weaker_than.indexOf(Game.challenge) ],
+          predicate = Game.challenge;
+
+      var str = [ subject, verb, predicate ].join(" ");
+
+      console.log('weaker', str);
+
+      Game.show_message(str, true);
+
+      _.delay(function(){
+        Game.hide_message();
+      }, 1000);
+
+      if (callback!==undefined) {
+        callback.call(this, blue);
+      }
+
+    }
+
   },
 
   is_stronger_than : function(new_challenge) {
@@ -315,8 +409,16 @@ Game = {
     Game.reset();
   },
 
-  show_message : function(text) {
-    Game.messages.html("<h2>" + text + "</h2>").animate({ opacity : 1 }, 300);
+  // if passed a callback, will delay for X seconds, then run it
+  show_message : function(text, subtle) {
+    
+    Game.messages.html("<h2>" + text + "</h2>");
+    if (subtle===true) {
+      Game.messages.addClass("subtle");
+    } else {
+      Game.messages.removeClass("subtle");
+    }
+    Game.messages.animate({ opacity : 1 },200);
   },
 
   hide_message : function(){
