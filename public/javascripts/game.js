@@ -275,13 +275,13 @@ Game = {
     if (new_challenge===undefined) {
 
       console.log('out of time');
-      if (blue) {
-        var str = "<span class='blue'>:)</span> <span class='red'>:(</span>";
-      } else {
-        var str = "<span class='blue'>:(</span> <span class='red'>:)</span>";
-      }
+      // if (blue) {
+      //   var str = "<span class='blue'>:)</span> <span class='red'>:(</span>";
+      // } else {
+      //   var str = "<span class='blue'>:(</span> <span class='red'>:)</span>";
+      // }
       
-      Game.show_message(str, true);
+      Game.show_message("Out of time!", true);
 
       _.delay(function(){
         Game.hide_message();
