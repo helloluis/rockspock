@@ -281,7 +281,7 @@ Game = {
       //   var str = "<span class='blue'>:(</span> <span class='red'>:)</span>";
       // }
       
-      Game.show_message("Out of time!", true);
+      Game.show_message((blue ? "Blue" : "Red") + " is out of time!", true);
 
       _.delay(function(){
         Game.hide_message();
