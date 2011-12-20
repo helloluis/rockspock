@@ -64,9 +64,9 @@ Game = {
   },
 
   initialize_sounds : function() {
-    Game.sounds.click  = new Audio("../sounds/clook.mp3");
-    Game.sounds.tick   = new Audio("../sounds/tock.mp3");
-    Game.sounds.buzzer = new Audio("../sounds/beep.mp3");
+    Game.sounds.click  = new Audio("sounds/clook.mp3");
+    Game.sounds.tick   = new Audio("sounds/tock.mp3");
+    Game.sounds.buzzer = new Audio("sounds/beep_long.mp3");
   },
 
   initialize_buttons : function(){
@@ -153,7 +153,7 @@ Game = {
 
   pick : function(blue, value, bttn) {
 
-    Game.sounds.click.play();
+    Game.sounds.tick.play();
     Game.send_challenge(!blue, value, bttn);
     Game.save_to_history(blue, value);
 
@@ -209,6 +209,8 @@ Game = {
 
     } else {
 
+      Game.sounds.buzzer.play();
+      
       var div = $("<div></div>").
         append("<div class='challenge " + value + "'></div>").
         append("<div class='challenge_countdown'></div>").
