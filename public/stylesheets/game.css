@@ -70,11 +70,11 @@ a, #intro p strong { color:#fc0; }
 .scissors { background:url(../images/scissors_blue.png); }
 .lizard { background:url(../images/lizard_blue.png); }
 .spock { background:url(../images/spock_blue.png); }
-#player_red .rock { background-image:url(../images/rock_red.png); }
-#player_red .paper { background:url(../images/paper_red.png); }
-#player_red .scissors { background:url(../images/scissors_red.png); }
-#player_red .lizard { background:url(../images/lizard_red.png); }
-#player_red .spock { background:url(../images/spock_red.png); }
+#player_red .challenge.rock, #player_red .buttons .rock { background-image:url(../images/rock_red.png); }
+#player_red .challenge.paper, #player_red .buttons .paper { background:url(../images/paper_red.png); }
+#player_red .challenge.scissors, #player_red .buttons .scissors { background:url(../images/scissors_red.png); }
+#player_red .challenge.lizard, #player_red .buttons .lizard { background:url(../images/lizard_red.png); }
+#player_red .challenge.spock, #player_red .buttons .spock { background:url(../images/spock_red.png); }
 .challenge { position:absolute; -webkit-transform: rotate(180deg); }
 .challenge_container { position:absolute; opacity:0; overflow:hidden; width:160px; height:160px; }
 .challenge_container .challenge { width:100%; height:100%; }
@@ -89,6 +89,11 @@ a, #intro p strong { color:#fc0; }
 .history { position:absolute; bottom:120px; right:25px; width:100px; height:380px; overflow:hidden; }
 .history ul { width:42%; padding:0px 3%; float:left; }
 .history ul li { width:24px; height:24px; background-size:cover; margin-bottom:5px; }
+.history ul.red .rock { background-image:url(../images/rock_red.png); }
+.history ul.red .paper { background-image:url(../images/paper_red.png); }
+.history ul.red .scissors { background-image:url(../images/scissors_red.png); }
+.history ul.red .lizard { background-image:url(../images/lizard_red.png); }
+.history ul.red .spock { background-image:url(../images/spock_red.png); }
 .pause, .quit { position:absolute; top:60px; left:20px; color:#fff; }
 .quit { left:40px; }
 
