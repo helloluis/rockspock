@@ -17,6 +17,8 @@ Game = {
 
   initialize : function(auto_start){
     
+    jQuery.fx.interval = 42;
+
     Game.initialize_containers();
     
     Game.initialize_behaviours();
