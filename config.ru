@@ -2,6 +2,10 @@ use Rack::Static,
   :urls => ["/stylesheets", "/images", "/javascripts", "/sounds"],
   :root => "public"
 
+configure do
+  Rack::Mime::MIME_TYPES[".manifest"] = "text/cache-manifest"
+end
+
 run lambda { |env|
   [
     200, 
